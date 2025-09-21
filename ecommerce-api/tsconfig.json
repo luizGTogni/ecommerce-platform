@@ -12,7 +12,7 @@
         "exactOptionalPropertyTypes": true,
         "paths": {
             "@/*": [
-                "./src/**"
+                "./src/*"
             ]
         },
         "strict": true,
