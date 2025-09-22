@@ -1,0 +1,41 @@
+name: Run Unit Tests
+
+on:
+  pull_request:
+    paths:
+      - "ecommerce-api/**" # dispara só se algo em backend mudar
+  push:
+    branches:
+      - main
+    paths:
+      - "ecommerce-api/**"
+
+jobs:
+  run-unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ecommerce-api
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run tests
+        run: pnpm test
