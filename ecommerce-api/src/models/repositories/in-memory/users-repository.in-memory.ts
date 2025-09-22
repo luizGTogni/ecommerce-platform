@@ -23,6 +23,11 @@ export class InMemoryUsersRepository implements IUsersRepository {
     return userCreated;
   }
 
+  async save(userEdited: User) {
+    const userIndex = this.users.findIndex((user) => user.id === userEdited.id);
+    this.users[userIndex] = userEdited;
+  }
+
   async findById(id: string) {
     return this.users.find((user) => user.id === id) || null;
   }
