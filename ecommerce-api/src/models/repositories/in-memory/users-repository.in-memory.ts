@@ -1,5 +1,5 @@
 import { User } from "@/models/entities/user.entity.js";
-import { UserCreate } from "../interfaces/dto/user-create.dto.js";
+import { UserCreate } from "../../entities/dto/user-create.dto.js";
 import { IUsersRepository } from "../interfaces/users-repository.interface.js";
 import { randomUUID } from "node:crypto";
 
@@ -19,6 +19,10 @@ export class InMemoryUsersRepository implements IUsersRepository {
     this.users.push(userCreated);
 
     return userCreated;
+  }
+
+  async findById(id: string) {
+    return this.users.find((user) => user.id === id) || null;
   }
 
   async findByEmail(email: string) {
