@@ -28,6 +28,10 @@ export class InMemoryUsersRepository implements IUsersRepository {
     this.users[userIndex] = userEdited;
   }
 
+  async delete(id: string) {
+    this.users = this.users.filter((user) => user.id !== id);
+  }
+
   async findById(id: string) {
     return this.users.find((user) => user.id === id) || null;
   }
