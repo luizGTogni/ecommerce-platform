@@ -1,5 +1,5 @@
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
-import { UserRead } from "@/models/entities/dto/user-read.dto.js";
+import { User } from "@/models/entities/user.entity.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
 
 type GetUserProfileRequest = {
@@ -7,7 +7,7 @@ type GetUserProfileRequest = {
 };
 
 type GetUserProfileResponse = {
-  user: UserRead;
+  user: User;
 };
 
 export class GetUserProfileService {
