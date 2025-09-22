@@ -6,6 +6,8 @@ import { randomUUID } from "node:crypto";
 export class InMemoryUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
+  private NUMBERS_BY_PAGE = 20;
+
   async create({ name, email, password_hash }: UserCreate) {
     const userCreated: User = {
       id: randomUUID(),
@@ -27,5 +29,19 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
   async findByEmail(email: string) {
     return this.users.find((user) => user.email === email) || null;
+  }
+
+  async searchMany(query: string, page: number = 1) {
+    const initialIndex = (page - 1) * this.NUMBERS_BY_PAGE;
+    const untialIndex = page * this.NUMBERS_BY_PAGE;
+
+    return this.users
+      .filter(
+        (user) =>
+          user.email.toLowerCase().includes(query.toLowerCase()) ||
+          user.name.toLowerCase().includes(query.toLowerCase()) ||
+          user.name.toLowerCase().includes(query.toLowerCase()),
+      )
+      .slice(initialIndex, untialIndex);
   }
 }
