@@ -57,7 +57,7 @@ describe("Authenticate Service (Unit)", () => {
     });
   });
 
-  it("should not be able create a user if user not exists", async () => {
+  it("should not be able to authenticate a user if user not exists", async () => {
     await expect(() =>
       sut.execute({
         email: "johndoe@example.com",
@@ -66,7 +66,7 @@ describe("Authenticate Service (Unit)", () => {
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
   });
 
-  it("should not be able create a user if the passwords do not match", async () => {
+  it("should not be able to authenticate a user if the passwords do not match", async () => {
     await usersRepository.create({
       name: "John Doe",
       email: "johndoe@example.com",
