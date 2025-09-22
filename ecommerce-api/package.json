@@ -1,7 +1,6 @@
 {
     "name": "ecommerce-api",
     "version": "1.0.0",
-    "description": "",
     "main": "index.js",
     "type": "module",
     "scripts": {
@@ -19,8 +18,6 @@
         "migrate:dev": "prisma migrate dev",
         "migrate": "prisma db push"
     },
-    "keywords": [],
-    "author": "",
     "license": "ISC",
     "packageManager": "pnpm@10.17.0",
     "devDependencies": {
