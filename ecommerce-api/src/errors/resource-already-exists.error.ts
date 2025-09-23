@@ -1,6 +1,11 @@
-export class ResourceAlreadyExistsError extends Error {
+import { AppError } from "./app.error.js";
+
+export class ResourceAlreadyExistsError extends AppError {
   constructor() {
-    super("Resource already exists.");
-    this.name = "ResourceAlreadyExists";
+    super({
+      message: "Resource already exists",
+      name: "ResourceAlreadyExists",
+      statusCode: 409,
+    });
   }
 }

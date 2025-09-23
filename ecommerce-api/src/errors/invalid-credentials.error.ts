@@ -1,6 +1,11 @@
-export class InvalidCredentialsError extends Error {
+import { AppError } from "./app.error.js";
+
+export class InvalidCredentialsError extends AppError {
   constructor() {
-    super("Invalid Credentials.");
-    this.name = "InvalidCredentials";
+    super({
+      message: "Invalid Credentials.",
+      name: "InvalidCredentials",
+      statusCode: 401,
+    });
   }
 }
