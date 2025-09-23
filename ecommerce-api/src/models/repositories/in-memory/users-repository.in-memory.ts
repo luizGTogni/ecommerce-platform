@@ -1,7 +1,7 @@
 import { User } from "@/models/entities/user.entity.js";
+import { randomUUID } from "node:crypto";
 import { UserCreate } from "../../entities/dto/user-create.dto.js";
 import { IUsersRepository } from "../interfaces/users-repository.interface.js";
-import { randomUUID } from "node:crypto";
 
 export class InMemoryUsersRepository implements IUsersRepository {
   private users: User[] = [];
@@ -42,15 +42,14 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
   async searchMany(query: string, page: number = 1) {
     const initialIndex = (page - 1) * this.NUMBERS_BY_PAGE;
-    const untialIndex = page * this.NUMBERS_BY_PAGE;
+    const untilIndex = page * this.NUMBERS_BY_PAGE;
 
     return this.users
       .filter(
         (user) =>
           user.email.toLowerCase().includes(query.toLowerCase()) ||
-          user.name.toLowerCase().includes(query.toLowerCase()) ||
           user.name.toLowerCase().includes(query.toLowerCase()),
       )
-      .slice(initialIndex, untialIndex);
+      .slice(initialIndex, untilIndex);
   }
 }
