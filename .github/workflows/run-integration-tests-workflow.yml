@@ -1,0 +1,54 @@
+name: Run Unit Tests
+
+on:
+  pull_request:
+    paths:
+      - "ecommerce-api/**"
+
+jobs:
+  run-integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ecommerce-api
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+          POSTGRES_DB: apiecommercepg
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432 -U docker; do
+            echo "Waiting Postgres..."
+            sleep 2
+          done
+
+      - name: Run integration tests
+        run: pnpm prisma generate && pnpm prisma migrate deploy && pnpm test:integration
+        env:
+          DATABASE_URL: "postgresql://test_user:test_pass@localhost:5432/apiecommercepg?schema=public"
