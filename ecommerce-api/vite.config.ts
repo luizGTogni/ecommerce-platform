@@ -21,6 +21,8 @@ export default defineConfig({
           name: "integration",
           dir: "src/tests/integrations/",
           include: ["**/*.{test,integration.spec}.?(c|m)[jt]s?(x)"],
+          environment:
+            "./src/configs/test-environments/vitest-environment-prisma/prisma-test-environment.ts",
         },
       },
     ],

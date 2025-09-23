@@ -1,20 +1,20 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+    provider = "prisma-client-js"
+    output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String   @id @default(uuid())
-  name          String
-  email         String   @unique
-  password_hash String
-  session_hash  String?
-  created_at    DateTime @default(now())
+    id            String   @id @default(uuid())
+    name          String
+    email         String   @unique
+    password_hash String
+    session_hash  String?
+    created_at    DateTime @default(now())
 
-  @@map("users")
+    @@map("users")
 }
