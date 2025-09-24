@@ -1,51 +1,30 @@
-import type {
-  IController,
-  IHttpRequest,
-  IHttpResponse,
-} from "@/http/interfaces/controller.interface";
-import type { UserRead } from "@/models/entities/dto/user-read.dto";
-import { makeCreateUserService } from "@/services/users/factories/make-create.factory";
+import { makeCreateUserService } from "@/services/users/factories/make-create.factory.js";
+import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
-interface ICreateUserBody {
-  name: string;
-  email: string;
-  password: string;
-}
+export async function createUser(request: FastifyRequest, reply: FastifyReply) {
+  const createUserBodySchema = z.object({
+    name: z.string(),
+    email: z.email(),
+    password: z.string().min(6),
+  });
 
-type CreateUserRequest = IHttpRequest<ICreateUserBody>;
+  const { name, email, password } = createUserBodySchema.parse(request.body);
 
-interface IUserResponse {
-  user: UserRead;
-}
+  try {
+    const useCase = makeCreateUserService();
 
-export class CreateUserController
-  implements IController<CreateUserRequest, IUserResponse>
-{
-  async handle(
-    request: CreateUserRequest,
-  ): Promise<IHttpResponse<IUserResponse>> {
-    const createUserBodySchema = z.object({
-      name: z.string(),
-      email: z.email(),
-      password: z.string().min(6),
+    const { user } = await useCase.execute({ name, email, password });
+
+    return reply.status(201).send({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        created_at: user.created_at,
+      },
     });
-
-    const { name, email, password } = createUserBodySchema.parse(request.body);
-
-    try {
-      const useCase = makeCreateUserService();
-
-      const { user } = await useCase.execute({ name, email, password });
-
-      return {
-        statusCode: 201,
-        body: {
-          user,
-        },
-      };
-    } catch (err) {
-      throw err;
-    }
+  } catch (err) {
+    throw err;
   }
 }
