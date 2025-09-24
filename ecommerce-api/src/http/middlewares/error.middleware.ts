@@ -1,5 +1,5 @@
-import { IHttpResponse } from "@/http/interfaces/controller.interface.js";
-import { AppError } from "../../errors/app.error.js";
+import { AppError } from "@/errors/app.error";
+import type { IHttpResponse } from "../interfaces/controller.interface";
 
 interface IErrorResponse {
   title: string;

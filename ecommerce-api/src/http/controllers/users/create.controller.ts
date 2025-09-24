@@ -1,10 +1,10 @@
-import {
+import type {
   IController,
   IHttpRequest,
   IHttpResponse,
-} from "@/http/interfaces/controller.interface.js";
-import { UserRead } from "@/models/entities/dto/user-read.dto.js";
-import { makeCreateUserService } from "@/services/users/factories/make-create.factory.js";
+} from "@/http/interfaces/controller.interface";
+import type { UserRead } from "@/models/entities/dto/user-read.dto";
+import { makeCreateUserService } from "@/services/users/factories/make-create.factory";
 import z from "zod";
 
 interface ICreateUserBody {

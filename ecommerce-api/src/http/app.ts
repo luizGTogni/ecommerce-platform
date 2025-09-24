@@ -1,6 +1,6 @@
+import { env } from "@/configs/env.js";
 import fastify from "fastify";
 import { errorHandler } from "./middlewares/error.middleware.js";
-import { env } from "@/configs/env.js";
 import { usersRoutes } from "./routes/users.route.js";
 
 export const app = fastify();
