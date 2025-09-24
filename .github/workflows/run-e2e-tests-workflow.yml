@@ -1,4 +1,4 @@
-name: Run Integrations Tests
+name: Run E2E Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - "ecommerce-api/**"
 
 jobs:
-  run-integration-tests:
+  run-e2e-tests:
     name: Run Integration Tests
     runs-on: ubuntu-latest
 
@@ -49,7 +49,7 @@ jobs:
           done
 
       - name: Run integration tests
-        run: pnpm prisma generate && pnpm prisma migrate deploy && pnpm test:integration
+        run: pnpm prisma generate && pnpm prisma db push && pnpm test:e2e
         env:
           DATABASE_URL: "postgresql://test_user:test_pass@localhost:5432/apiecommercepg?schema=public"
           JWT_SECRET: "90g093gj0934jv0934jv0349jg3409"

@@ -1,14 +1,11 @@
-import { AppError } from "@/errors/app.error";
-import type { IHttpResponse } from "../interfaces/controller.interface";
-
-interface IErrorResponse {
-  title: string;
-  detail: string;
-}
+import { AppError } from "@/errors/app.error.js";
+import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function errorHandler(
   err: Error,
-): Promise<IHttpResponse<IErrorResponse>> {
+  _request: FastifyRequest,
+  reply: FastifyReply,
+) {
   if (err instanceof AppError) {
     return {
       statusCode: err.statusCode,
@@ -19,11 +16,7 @@ export async function errorHandler(
     };
   }
 
-  return {
-    statusCode: 500,
-    body: {
-      title: "Server error",
-      detail: err.message,
-    },
-  };
+  return reply
+    .status(500)
+    .send({ title: "Internal server error.", detail: err.message });
 }
