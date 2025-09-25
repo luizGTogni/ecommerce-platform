@@ -8,7 +8,7 @@ import { InMemorySessionsRepository } from "@/models/repositories/in-memory/sess
 import { InMemoryUsersRepository } from "@/models/repositories/in-memory/users-repository.in-memory.js";
 import type { ISessionsRepository } from "@/models/repositories/interfaces/sessions-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
-import { SaveRefreshTokenService } from "@/services/users/save-refresh-token.service.js";
+import { SaveRefreshTokenService } from "@/services/sessions/save-refresh-token.service.js";
 import { hash } from "bcryptjs";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -56,6 +56,31 @@ describe("Save Refresh Token Service (Unit)", () => {
         created_at: expect.any(Date),
       }),
     );
+  });
+
+  it("should be able to save refresh token and update revoked to true session previous", async () => {
+    const user = await usersRepository.create({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password_hash: await hash("123456", 6),
+    });
+
+    const sessionPrevious = await sut.execute({
+      userId: user.id,
+      refreshToken: "refresh-token-here",
+      expiresAt: new Date(),
+    });
+
+    expect(sessionPrevious.session.revoked).toEqual(false);
+
+    const sessionCurrent = await sut.execute({
+      userId: user.id,
+      refreshToken: "refresh-token-here-2",
+      expiresAt: new Date(),
+    });
+
+    expect(sessionPrevious.session.revoked).toEqual(true);
+    expect(sessionCurrent.session.revoked).toEqual(false);
   });
 
   it("should not be able to save refresh token if user not exists", async () => {
