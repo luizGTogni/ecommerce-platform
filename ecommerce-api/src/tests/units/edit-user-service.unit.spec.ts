@@ -37,7 +37,6 @@ describe("Edit User Service (Unit)", () => {
         id: expect.any(String),
         name: "Paul Doe",
         email: "pauldoe@example.com",
-        session_hash: null,
         created_at: expect.any(Date),
       }),
     );

@@ -14,7 +14,6 @@ export class InMemoryUsersRepository implements IUsersRepository {
       name,
       email,
       password_hash,
-      session_hash: null,
       created_at: new Date(),
     };
 

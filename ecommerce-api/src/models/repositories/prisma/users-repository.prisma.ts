@@ -23,7 +23,6 @@ export class PrismaUsersRepository implements IUsersRepository {
         name: userEdited.name,
         email: userEdited.email,
         password_hash: userEdited.password_hash,
-        session_hash: userEdited.session_hash ? userEdited.session_hash : "",
       },
     });
   }

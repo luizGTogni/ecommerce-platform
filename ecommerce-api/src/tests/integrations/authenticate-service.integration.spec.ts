@@ -40,7 +40,6 @@ describe("Authenticate Service (Integration)", () => {
         name: "John Doe",
         email: "johndoe@example.com",
         password_hash: expect.any(String),
-        session_hash: null,
         created_at: expect.any(Date),
       }),
     );
