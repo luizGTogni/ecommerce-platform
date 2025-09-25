@@ -18,10 +18,8 @@ export async function createUser(request: FastifyRequest, reply: FastifyReply) {
 
     return reply.status(201).send({
       user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        created_at: user.created_at,
+        ...user,
+        password_hash: undefined,
       },
     });
   } catch (err) {
