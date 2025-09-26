@@ -4,8 +4,11 @@ import { env } from "@/configs/env.js";
 import fastify from "fastify";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { usersRoutes } from "./routes/users.route.js";
+import { redis } from "@/configs/redis.js";
 
 export const app = fastify();
+
+redis.connect();
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,

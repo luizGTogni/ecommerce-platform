@@ -1,4 +1,6 @@
 import { makeGetSessionService } from "@/services/sessions/factories/make-get-session.factory.js";
+import { makeSaveRefreshTokenService } from "@/services/sessions/factories/make-save-refresh-token.factory.js";
+import dayjs from "dayjs";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function refreshToken(
@@ -34,6 +36,14 @@ export async function refreshToken(
       {},
       { sign: { sub: request.user.sub, expiresIn: "7d" } },
     );
+
+    const saveRefreshToken = makeSaveRefreshTokenService();
+
+    await saveRefreshToken.execute({
+      userId: request.user.sub,
+      refreshToken: refreshToken,
+      expiresAt: dayjs().add(7, "day").toDate(),
+    });
 
     return reply
       .setCookie("refreshToken", refreshToken, {
