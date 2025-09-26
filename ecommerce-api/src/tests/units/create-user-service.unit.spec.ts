@@ -36,7 +36,6 @@ describe("Create User Service (Unit)", () => {
         name: "John Doe",
         email: "johndoe@example.com",
         password_hash: "hashed-123456",
-        session_hash: null,
         created_at: expect.any(Date),
       }),
     );

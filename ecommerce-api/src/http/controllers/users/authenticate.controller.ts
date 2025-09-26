@@ -1,4 +1,6 @@
+import { makeSaveRefreshTokenService } from "@/services/sessions/factories/make-save-refresh-token.factory.js";
 import { makeAuthenticateService } from "@/services/users/factories/make-authenticate.factory.js";
+import dayjs from "dayjs";
 
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
@@ -16,6 +18,7 @@ export async function authenticate(
 
   try {
     const authenticateUseCase = makeAuthenticateService();
+    const saveRefreshToken = makeSaveRefreshTokenService();
 
     const { user } = await authenticateUseCase.execute({ email, password });
 
@@ -32,6 +35,12 @@ export async function authenticate(
       {},
       { sign: { sub: user.id, expiresIn: "7d" } },
     );
+
+    await saveRefreshToken.execute({
+      userId: user.id,
+      refreshToken: refreshToken,
+      expiresAt: dayjs().add(7, "day").toDate(),
+    });
 
     return reply
       .setCookie("refreshToken", refreshToken, {
