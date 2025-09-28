@@ -1,19 +1,14 @@
+import { authenticateBodySchema } from "@/http/schemas/http/users/http-authenticate.schema.js";
 import { makeSaveRefreshTokenService } from "@/services/sessions/factories/make-save-refresh-token.factory.js";
 import { makeAuthenticateService } from "@/services/users/factories/make-authenticate.factory.js";
 import dayjs from "dayjs";
 
 import { FastifyReply, FastifyRequest } from "fastify";
-import z from "zod";
 
 export async function authenticate(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const authenticateBodySchema = z.object({
-    email: z.email(),
-    password: z.string().min(6),
-  });
-
   const { email, password } = authenticateBodySchema.parse(request.body);
 
   try {
