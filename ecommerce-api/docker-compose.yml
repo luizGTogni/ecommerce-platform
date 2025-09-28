@@ -9,5 +9,18 @@ services:
     volumes:
       - pg_data:/bitnami/postgresql
 
+  api-ecommerce-redis:
+    image: redis:7.4
+    container_name: api-ecommerce-redis
+    command: >
+      redis-server
+      --port ${REDIS_PORT}
+      --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_data:/pg_data
+
 volumes:
   pg_data:
+  redis_data:

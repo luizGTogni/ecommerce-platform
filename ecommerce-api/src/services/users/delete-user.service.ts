@@ -1,4 +1,5 @@
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
+import type { ISessionsRepository } from "@/models/repositories/interfaces/sessions-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
 
 type DeleteUserRequest = {
@@ -6,7 +7,10 @@ type DeleteUserRequest = {
 };
 
 export class DeleteUserService {
-  constructor(private readonly usersRepository: IUsersRepository) {}
+  constructor(
+    private readonly usersRepository: IUsersRepository,
+    private readonly sessionsRepository: ISessionsRepository,
+  ) {}
 
   async execute({ userId }: DeleteUserRequest): Promise<void> {
     const user = await this.usersRepository.findById(userId);
@@ -14,6 +18,8 @@ export class DeleteUserService {
     if (!user) {
       throw new ResourceNotFoundError();
     }
+
+    await this.sessionsRepository.deleteManyByUserId(userId);
 
     await this.usersRepository.delete(userId);
   }

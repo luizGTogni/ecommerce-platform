@@ -1,10 +1,10 @@
+import { prisma } from "@/configs/prisma.js";
 import type { SessionCreate } from "@/models/entities/dto/session-create.dto.js";
 import type { Session } from "@/models/entities/session.entity.js";
 import type {
   IFindByUserIdAndRevokedProps,
   ISessionsRepository,
 } from "../interfaces/sessions-repository.interface.js";
-import { prisma } from "@/configs/prisma.js";
 
 export class PrismaSessionsRepository implements ISessionsRepository {
   async create(data: SessionCreate) {
@@ -34,6 +34,14 @@ export class PrismaSessionsRepository implements ISessionsRepository {
       where: {
         user_id: userId,
         revoked: isRevoked,
+      },
+    });
+  }
+
+  async deleteManyByUserId(userId: string) {
+    await prisma.session.deleteMany({
+      where: {
+        user_id: userId,
       },
     });
   }

@@ -1,18 +1,22 @@
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
+import { InMemorySessionsRepository } from "@/models/repositories/in-memory/sessions-repository.in-memory.js";
 import { InMemoryUsersRepository } from "@/models/repositories/in-memory/users-repository.in-memory.js";
+import type { ISessionsRepository } from "@/models/repositories/interfaces/sessions-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
 import { DeleteUserService } from "@/services/users/delete-user.service.js";
 import { hash } from "bcryptjs";
 import { beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 
 let usersRepository: IUsersRepository;
+let sessionsRepository: ISessionsRepository;
 let sut: DeleteUserService;
 let spyFindById: MockInstance;
 
 describe("Delete User Service (Unit)", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
-    sut = new DeleteUserService(usersRepository);
+    sessionsRepository = new InMemorySessionsRepository();
+    sut = new DeleteUserService(usersRepository, sessionsRepository);
     spyFindById = vi.spyOn(usersRepository, "findById");
   });
 

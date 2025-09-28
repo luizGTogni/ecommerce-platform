@@ -1,11 +1,14 @@
-import fastifyJwt from "@fastify/jwt";
-import fastifyCookie from "@fastify/cookie";
 import { env } from "@/configs/env.js";
+import { RedisClient } from "@/configs/redis.js";
+import fastifyCookie from "@fastify/cookie";
+import fastifyJwt from "@fastify/jwt";
 import fastify from "fastify";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { usersRoutes } from "./routes/users.route.js";
 
 export const app = fastify();
+
+export const redis = RedisClient.getClient();
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,

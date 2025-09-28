@@ -23,6 +23,10 @@ jobs:
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_pass
           POSTGRES_DB: apiecommercepg
+      redis:
+        image: redis:7.4
+        ports:
+          - 6379:6379
 
     steps:
       - name: Checkout
@@ -53,3 +57,6 @@ jobs:
         env:
           DATABASE_URL: "postgresql://test_user:test_pass@localhost:5432/apiecommercepg?schema=public"
           JWT_SECRET: "90g093gj0934jv0934jv0349jg3409"
+          REDIS_MODE: "dev"
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ""
