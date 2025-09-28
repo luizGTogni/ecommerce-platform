@@ -1,4 +1,5 @@
-import { prisma } from "@/configs/prisma";
+import { prisma } from "@/configs/prisma.js";
+import { RedisClient } from "@/configs/redis.js";
 import "dotenv/config";
 import { execSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
@@ -22,8 +23,10 @@ export default <Environment>{
   async setup() {
     const schema = randomUUID();
     const databaseUrl = generateDatabaseUrl(schema);
+    const redis = RedisClient.getClient();
 
     process.env.DATABASE_URL = databaseUrl;
+    process.env.REDIS_MODE = "test";
 
     execSync("npx prisma db push");
 
@@ -32,6 +35,9 @@ export default <Environment>{
         await prisma.$executeRawUnsafe(
           `DROP SCHEMA IF EXISTS "${schema}" CASCADE`,
         );
+
+        await redis.flushdb();
+        await redis.quit();
 
         await prisma.$disconnect();
       },
