@@ -54,7 +54,7 @@ describe("Logout Session Service (Unit)", () => {
     );
 
     const responseCached = await memcacheRepository.get(
-      `revoked_list_${sessionCreated.id}`,
+      `revoked_list_${sessionCreated.user_id}`,
     );
 
     expect(responseCached).toEqual("token-here");
@@ -90,7 +90,7 @@ describe("Logout Session Service (Unit)", () => {
     vi.setSystemTime("2025-09-25T11:15:01Z");
 
     const responseCached = await memcacheRepository.get(
-      `revoked_list_${sessionCreated.id}`,
+      `revoked_list_${sessionCreated.user_id}`,
     );
 
     expect(responseCached).toEqual(null);
