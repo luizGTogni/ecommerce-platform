@@ -35,9 +35,9 @@ export class LogoutSessionService {
     await this.sessionsRepository.save(session);
 
     await this.memcacheRepository.set({
-      key: `revoked_list_${session.id}`,
+      key: `revoked_list_${session.user_id}`,
       value: token,
-      configs: { EX: 900 },
+      expireAt: 900,
     });
 
     return { session };
