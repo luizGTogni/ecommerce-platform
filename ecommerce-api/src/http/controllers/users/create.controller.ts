@@ -1,14 +1,8 @@
+import { createUserBodySchema } from "@/http/schemas/http/users/http-create.schema.js";
 import { makeCreateUserService } from "@/services/users/factories/make-create.factory.js";
 import { FastifyReply, FastifyRequest } from "fastify";
-import z from "zod";
 
 export async function createUser(request: FastifyRequest, reply: FastifyReply) {
-  const createUserBodySchema = z.object({
-    name: z.string(),
-    email: z.email(),
-    password: z.string().min(6),
-  });
-
   const { name, email, password } = createUserBodySchema.parse(request.body);
 
   try {

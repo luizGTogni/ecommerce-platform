@@ -1,19 +1,15 @@
 import { AppError } from "@/errors/app.error.js";
-import { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 
 export async function errorHandler(
-  err: Error,
+  err: FastifyError,
   _request: FastifyRequest,
   reply: FastifyReply,
 ) {
   if (err instanceof AppError) {
-    return {
-      statusCode: err.statusCode,
-      body: {
-        title: err.name,
-        detail: err.message,
-      },
-    };
+    return reply
+      .status(err.statusCode)
+      .send({ title: err.name, detail: err.message });
   }
 
   return reply
