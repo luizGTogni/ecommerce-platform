@@ -4,12 +4,19 @@ import { fastifyCookie } from "@fastify/cookie";
 import { fastifyCors } from "@fastify/cors";
 import { fastifyJwt } from "@fastify/jwt";
 import { fastify } from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { usersRoutes } from "./routes/users.route.js";
 
 export const app = fastify();
 
 export const redis = RedisClient.getClient();
+
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
 app.register(fastifyCors, { origin: "*" });
 
