@@ -30,8 +30,6 @@ describe("Search Users (e2e)", () => {
       .set("Authorization", `Bearer ${token}`)
       .send();
 
-    console.log(response.body);
-
     expect(response.statusCode).toEqual(200);
     expect(response.body.users).toHaveLength(2);
     expect(response.body.users).toEqual(

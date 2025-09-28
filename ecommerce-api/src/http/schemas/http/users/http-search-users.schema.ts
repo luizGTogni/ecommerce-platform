@@ -5,11 +5,13 @@ export const searchUsersQuerySchema = z.object({
   page: z.coerce.number().default(1),
 });
 
-export const searchUsersResponseSuccessSchema = z.array(
-  z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string(),
-    created_at: z.date(),
-  }),
-);
+export const searchUsersResponseSuccessSchema = z.object({
+  users: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string(),
+      created_at: z.date(),
+    }),
+  ),
+});

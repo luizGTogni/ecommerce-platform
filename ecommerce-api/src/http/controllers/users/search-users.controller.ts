@@ -20,7 +20,7 @@ export async function searchUsers(
       return { ...user, password_hash: undefined };
     });
 
-    return reply.status(200).send({ usersMapped });
+    return reply.status(200).send({ users: usersMapped });
   } catch (err) {
     throw err;
   }
