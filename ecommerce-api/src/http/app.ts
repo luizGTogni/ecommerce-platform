@@ -3,15 +3,19 @@ import { RedisClient } from "@/configs/redis.js";
 import { fastifyCookie } from "@fastify/cookie";
 import { fastifyCors } from "@fastify/cors";
 import { fastifyJwt } from "@fastify/jwt";
+import { fastifySwagger } from "@fastify/swagger";
+import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { fastify } from "fastify";
 import {
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
+  type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { usersRoutes } from "./routes/users.route.js";
 
-export const app = fastify();
+export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 export const redis = RedisClient.getClient();
 
@@ -33,6 +37,29 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCookie);
 
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "Ecommerce API",
+      version: "1.0.0",
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+  },
+  transform: jsonSchemaTransform,
+});
+
+app.register(fastifySwaggerUi, {
+  routePrefix: "/docs",
+});
+
 app.register(usersRoutes);
 
 app.setErrorHandler(async (error, request, reply) => {
@@ -40,7 +67,5 @@ app.setErrorHandler(async (error, request, reply) => {
     console.log(error);
   }
 
-  const response = await errorHandler(error, request, reply);
-
-  return reply.status(response.statusCode).send(response.body);
+  await errorHandler(error, request, reply);
 });
