@@ -21,12 +21,12 @@ export class InMemoryMemcacheRepository implements IMemcacheRepository {
     );
   }
 
-  async set({ key, value, configs }: ISetProps) {
+  async set({ key, value, expireAt }: ISetProps) {
     let item: Items = {
       key,
       value,
-      expiresAt: configs?.EX
-        ? dayjs(new Date()).add(configs.EX, "second").toDate()
+      expiresAt: expireAt
+        ? dayjs(new Date()).add(expireAt, "second").toDate()
         : null,
     };
 

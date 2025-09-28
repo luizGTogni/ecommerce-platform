@@ -1,11 +1,7 @@
-export interface IConfigsSetProps {
-  EX: number;
-}
-
 export interface ISetProps {
   key: string;
   value: string;
-  configs: IConfigsSetProps | null;
+  expireAt: number | null;
 }
 
 export interface IMemcacheRepository {
