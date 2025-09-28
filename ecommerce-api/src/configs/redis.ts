@@ -1,38 +1,25 @@
-import { createClient, RedisClientType } from "redis";
+import { Redis } from "ioredis";
 import { env } from "./env.js";
 
-class RedisClient {
-  private readonly client: RedisClientType;
+export class RedisClient {
+  private static instance: Redis | null = null;
 
-  constructor() {
-    this.client = createClient({ url: env.REDIS_URL });
-    this.client.on("error", (err) => console.log("Redis Error:", err));
-  }
+  static getClient(mode: "dev" | "test" | null = null): Redis {
+    if (!this.instance) {
+      let db = env.REDIS_MODE === "test" ? 15 : 0;
+      if (mode) {
+        db = mode === "test" ? 15 : 0;
+      }
 
-  async connect(redisDb: "PROD" | "TEST" = "PROD") {
-    if (!this.client.isOpen) {
-      await this.client.connect();
-      await this.client.select(redisDb === "PROD" ? 0 : 15);
+      this.instance = new Redis({
+        port: env.REDIS_PORT || 6379,
+        password: env.REDIS_PASSWORD || "",
+        db,
+      });
+
+      this.instance.on("error", (err) => console.error("Redis error:", err));
     }
-  }
 
-  async getClient() {
-    if (!this.client.isOpen) {
-      return this.client;
-    }
-  }
-
-  async clearAll() {
-    if (!this.client.isOpen) {
-      await this.client.flushDb();
-    }
-  }
-
-  async quit() {
-    if (this.client.isOpen) {
-      await this.client.quit();
-    }
+    return this.instance;
   }
 }
-
-export const redis = new RedisClient();

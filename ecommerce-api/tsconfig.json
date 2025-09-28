@@ -10,6 +10,7 @@
         "strict": true,
         "declaration": true,
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "moduleResolution": "nodenext",
