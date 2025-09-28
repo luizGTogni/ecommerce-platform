@@ -1,19 +1,21 @@
+import type { Redis } from "ioredis";
 import {
   IMemcacheRepository,
   ISetProps,
 } from "../interfaces/memcache-repository.interface.js";
-import { RedisClientType } from "redis";
 
 export class RedisMemcacheRepository implements IMemcacheRepository {
-  constructor(private readonly redisConn: RedisClientType) {}
+  constructor(private readonly redis: Redis) {}
 
-  async set({ key, value, configs }: ISetProps) {
-    await this.redisConn.set(key, value, {
-      expiration: configs ? { type: "EX", value: configs.EX } : undefined,
-    });
+  async set({ key, value, expireAt }: ISetProps) {
+    await this.redis.set(key, value);
+
+    if (expireAt) {
+      await this.redis.expire(key, expireAt);
+    }
   }
 
   async get(key: string) {
-    return await this.redisConn.get(key);
+    return await this.redis.get(key);
   }
 }
