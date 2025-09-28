@@ -1,18 +1,22 @@
 import { prisma } from "@/configs/prisma.js";
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
+import type { ISessionsRepository } from "@/models/repositories/interfaces/sessions-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
+import { PrismaSessionsRepository } from "@/models/repositories/prisma/sessions-repository.prisma.js";
 import { PrismaUsersRepository } from "@/models/repositories/prisma/users-repository.prisma.js";
 import { DeleteUserService } from "@/services/users/delete-user.service.js";
 import { hash } from "bcryptjs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 let usersRepository: IUsersRepository;
+let sessionsRepository: ISessionsRepository;
 let sut: DeleteUserService;
 
 describe("Delete User Service (Integration)", () => {
   beforeEach(() => {
     usersRepository = new PrismaUsersRepository();
-    sut = new DeleteUserService(usersRepository);
+    sessionsRepository = new PrismaSessionsRepository();
+    sut = new DeleteUserService(usersRepository, sessionsRepository);
   });
 
   afterEach(async () => {
