@@ -12,4 +12,5 @@ export interface ISessionsRepository {
   findByUserIdAndRevoked(
     props: IFindByUserIdAndRevokedProps,
   ): Promise<Session | null>;
+  deleteManyByUserId(userId: string): Promise<void>;
 }

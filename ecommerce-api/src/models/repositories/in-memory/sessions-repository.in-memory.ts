@@ -42,4 +42,10 @@ export class InMemorySessionsRepository implements ISessionsRepository {
       ) || null
     );
   }
+
+  async deleteManyByUserId(userId: string) {
+    this.sessions = this.sessions.filter(
+      (session) => session.user_id !== userId,
+    );
+  }
 }
