@@ -5,6 +5,8 @@ import { Prisma } from "@/generated/prisma/index.js";
 import { Product } from "@/models/entities/product.entity.js";
 
 export class PrismaProductsRepository implements IProductsRepository {
+  private NUMBERS_BY_PAGE = 20;
+
   async create(data: ProductCreate) {
     const product = await prisma.product.create({
       data: {
@@ -46,5 +48,73 @@ export class PrismaProductsRepository implements IProductsRepository {
       ...product,
       price: product.price.toNumber(),
     };
+  }
+
+  async searchMany(query: string, includeInactive: boolean, page: number) {
+    const initialPage = (page - 1) * this.NUMBERS_BY_PAGE;
+    const untilPage = page * this.NUMBERS_BY_PAGE;
+
+    if (includeInactive) {
+      const products = await prisma.product.findMany({
+        where: {
+          OR: [
+            {
+              title: {
+                contains: query,
+              },
+            },
+            {
+              description: {
+                contains: query,
+              },
+            },
+            {
+              category: {
+                contains: query,
+              },
+            },
+          ],
+        },
+        skip: initialPage,
+        take: untilPage,
+      });
+
+      return products.map((product) => {
+        return { ...product, price: product.price.toNumber() };
+      });
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: query,
+            },
+          },
+          {
+            description: {
+              contains: query,
+            },
+          },
+          {
+            category: {
+              contains: query,
+            },
+          },
+        ],
+        AND: [
+          {
+            is_active: true,
+          },
+        ],
+      },
+      skip: initialPage,
+      take: untilPage,
+    });
+
+    return products.map((product) => {
+      return { ...product, price: product.price.toNumber() };
+    });
   }
 }

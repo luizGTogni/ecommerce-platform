@@ -5,4 +5,9 @@ export interface IProductsRepository {
   create(data: ProductCreate): Promise<Product>;
   save(productId: string, productData: Product): Promise<void>;
   findById(id: string): Promise<Product | null>;
+  searchMany(
+    query: string,
+    includeInactive: boolean,
+    page: number,
+  ): Promise<Product[]>;
 }
