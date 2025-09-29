@@ -14,6 +14,7 @@ import {
 } from "fastify-type-provider-zod";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { usersRoutes } from "./routes/users.route.js";
+import { productsRoutes } from "./routes/products.route.js";
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -61,6 +62,7 @@ app.register(fastifySwaggerUi, {
 });
 
 app.register(usersRoutes);
+app.register(productsRoutes);
 
 app.setErrorHandler(async (error, request, reply) => {
   if (env.NODE_ENV !== "production") {
