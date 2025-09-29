@@ -31,3 +31,15 @@ model Session {
 
     @@map("sessions")
 }
+
+model Product {
+    id          String  @id @default(uuid())
+    title       String
+    description String?
+    category    String
+    price       Decimal
+    quantity    Int     @default(0)
+    is_active   Boolean @default(true)
+
+    @@map("products")
+}
