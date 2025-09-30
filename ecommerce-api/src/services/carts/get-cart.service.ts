@@ -1,5 +1,5 @@
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
-import { Cart } from "@/models/entities/cart.entity.js";
+import type { CartRead } from "@/models/entities/dto/cart-read.dto.js";
 import { ICartsRepository } from "@/models/repositories/interfaces/carts-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
 
@@ -9,7 +9,7 @@ type GetCartRequest = {
 };
 
 type GetCartResponse = {
-  cart: Cart;
+  cart: CartRead;
   total_products: number;
   total_price: number;
 };
@@ -46,6 +46,24 @@ export class GetCartService {
         )
       : 0;
 
-    return { cart, total_products, total_price };
+    const cartItemsFormatted = cart.cart_items?.map((item) => {
+      return {
+        ...item,
+        unit_price: item.unit_price.toNumber(),
+        product: {
+          ...item.product,
+          price: item.product.price.toNumber(),
+        },
+      };
+    });
+
+    return {
+      cart: {
+        ...cart,
+        cart_items: cartItemsFormatted,
+      },
+      total_products,
+      total_price,
+    };
   }
 }
