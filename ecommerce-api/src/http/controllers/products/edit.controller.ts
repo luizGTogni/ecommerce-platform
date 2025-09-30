@@ -3,6 +3,7 @@ import {
   editProductParamsSchema,
 } from "@/http/schemas/http/products/http-edit.schema.js";
 import { makeEditProductService } from "@/services/products/factories/make-edit-service.factory.js";
+import { Decimal } from "@prisma/client/runtime/library";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function editProduct(
@@ -28,7 +29,10 @@ export async function editProduct(
     });
 
     return reply.status(200).send({
-      product,
+      product: {
+        ...product,
+        price: new Decimal(product.price).toNumber(),
+      },
     });
   } catch (err) {
     throw err;
