@@ -8,17 +8,12 @@ export class PrismaProductsRepository implements IProductsRepository {
   private NUMBERS_BY_PAGE = 20;
 
   async create(data: ProductCreate) {
-    const product = await prisma.product.create({
+    return await prisma.product.create({
       data: {
         ...data,
         price: Prisma.Decimal(data.price),
       },
     });
-
-    return {
-      ...product,
-      price: data.price,
-    };
   }
 
   async save(productId: string, productData: Product) {
@@ -34,20 +29,11 @@ export class PrismaProductsRepository implements IProductsRepository {
   }
 
   async findById(id: string) {
-    const product = await prisma.product.findUnique({
+    return await prisma.product.findUnique({
       where: {
         id,
       },
     });
-
-    if (!product) {
-      return null;
-    }
-
-    return {
-      ...product,
-      price: product.price.toNumber(),
-    };
   }
 
   async searchMany(query: string, includeInactive: boolean, page: number) {
@@ -79,9 +65,7 @@ export class PrismaProductsRepository implements IProductsRepository {
         take: untilPage,
       });
 
-      return products.map((product) => {
-        return { ...product, price: product.price.toNumber() };
-      });
+      return products;
     }
 
     const products = await prisma.product.findMany({
@@ -113,8 +97,6 @@ export class PrismaProductsRepository implements IProductsRepository {
       take: untilPage,
     });
 
-    return products.map((product) => {
-      return { ...product, price: product.price.toNumber() };
-    });
+    return products;
   }
 }
