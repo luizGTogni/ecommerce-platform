@@ -14,10 +14,7 @@ export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
     });
 
     return reply.status(200).send({
-      product: {
-        ...product,
-        price: product.price.toNumber(),
-      },
+      product,
     });
   } catch (err) {
     throw err;

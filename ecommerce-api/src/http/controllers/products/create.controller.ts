@@ -22,10 +22,7 @@ export async function createProduct(
     });
 
     return reply.status(201).send({
-      product: {
-        ...product,
-        price: product.price.toNumber(),
-      },
+      product,
     });
   } catch (err) {
     throw err;
