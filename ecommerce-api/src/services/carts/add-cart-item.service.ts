@@ -6,6 +6,7 @@ import { ICartItemsRepository } from "@/models/repositories/interfaces/cart-item
 import { ICartsRepository } from "@/models/repositories/interfaces/carts-repository.interface.js";
 import { IProductsRepository } from "@/models/repositories/interfaces/products-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
+import { Decimal } from "@prisma/client/runtime/library";
 
 type AddCartItemRequest = {
   userId: string;
@@ -69,6 +70,7 @@ export class AddCartItemService {
 
     if (cartItem) {
       cartItem.quantity = quantity;
+      cartItem.unit_price = new Decimal(product.price);
 
       await this.cartItemsRepository.save(cartItem.id, cartItem);
 
@@ -79,7 +81,7 @@ export class AddCartItemService {
       cart_id: cartId,
       product_id: productId,
       quantity,
-      unit_price: product.price,
+      unit_price: new Decimal(product.price),
     });
 
     return { cartItem };
