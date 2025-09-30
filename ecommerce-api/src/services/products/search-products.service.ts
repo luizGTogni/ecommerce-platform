@@ -1,4 +1,4 @@
-import { Product } from "@/models/entities/product.entity.js";
+import type { ProductRead } from "@/models/entities/dto/product-read.dto.js";
 import { IProductsRepository } from "@/models/repositories/interfaces/products-repository.interface.js";
 
 type SearchProductsRequest = {
@@ -8,7 +8,7 @@ type SearchProductsRequest = {
 };
 
 type SearchProductsResponse = {
-  products: Product[];
+  products: ProductRead[];
 };
 
 export class SearchProductsService {
@@ -25,6 +25,10 @@ export class SearchProductsService {
       page,
     );
 
-    return { products };
+    const productsFormatted = products.map((product) => {
+      return { ...product, price: product.price.toNumber() };
+    });
+
+    return { products: productsFormatted };
   }
 }

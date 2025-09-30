@@ -1,5 +1,5 @@
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
-import { Product } from "@/models/entities/product.entity.js";
+import type { ProductRead } from "@/models/entities/dto/product-read.dto.js";
 import { IProductsRepository } from "@/models/repositories/interfaces/products-repository.interface.js";
 
 type GetProductRequest = {
@@ -8,7 +8,7 @@ type GetProductRequest = {
 };
 
 type GetProductResponse = {
-  product: Product;
+  product: ProductRead;
 };
 
 export class GetProductService {
@@ -28,6 +28,11 @@ export class GetProductService {
       throw new ResourceNotFoundError();
     }
 
-    return { product };
+    return {
+      product: {
+        ...product,
+        price: product.price.toNumber(),
+      },
+    };
   }
 }
