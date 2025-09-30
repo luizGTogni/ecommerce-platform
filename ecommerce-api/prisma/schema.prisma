@@ -15,6 +15,7 @@ model User {
     password_hash String
     created_at    DateTime  @default(now())
     session       Session[]
+    Cart          Cart[]
 
     @@map("users")
 }
@@ -33,13 +34,47 @@ model Session {
 }
 
 model Product {
-    id          String  @id @default(uuid())
+    id          String     @id @default(uuid())
     title       String
     description String?
     category    String
     price       Decimal
-    quantity    Int     @default(0)
-    is_active   Boolean @default(true)
+    quantity    Int        @default(0)
+    is_active   Boolean    @default(true)
+    CartItem    CartItem[]
 
     @@map("products")
+}
+
+enum CartStatus {
+    OPEN
+    CANCELED
+    COMPLETED
+}
+
+model Cart {
+    id          String     @id @default(uuid())
+    status      CartStatus @default(OPEN)
+    finished_at DateTime?
+    created_at  DateTime   @default(now())
+
+    user_id  String
+    user     User       @relation(fields: [user_id], references: [id])
+    CartItem CartItem[]
+
+    @@map("carts")
+}
+
+model CartItem {
+    id         String  @id @default(uuid())
+    quantity   Int     @default(1)
+    unit_price Decimal
+
+    cart    Cart   @relation(fields: [cart_id], references: [id])
+    cart_id String
+
+    product    Product @relation(fields: [product_id], references: [id])
+    product_id String
+
+    @@map("cart_items")
 }
