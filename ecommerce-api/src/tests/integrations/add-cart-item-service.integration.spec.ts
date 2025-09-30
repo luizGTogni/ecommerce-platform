@@ -11,6 +11,7 @@ import { PrismaCartsRepository } from "@/models/repositories/prisma/carts-reposi
 import { PrismaProductsRepository } from "@/models/repositories/prisma/products-repository.prisma.js";
 import { PrismaUsersRepository } from "@/models/repositories/prisma/users-repository.prisma.js";
 import { AddCartItemService } from "@/services/carts/add-cart-item.service.js";
+import { Decimal } from "@prisma/client/runtime/library";
 import { hash } from "bcryptjs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -318,7 +319,7 @@ describe("Add Cart Item Service (Integration)", () => {
         cart_id: cart.id,
         product_id: product.id,
         quantity: 5,
-        unit_price: product.price,
+        unit_price: new Decimal(product.price),
       }),
     );
   });
