@@ -44,7 +44,6 @@ describe("Create Product Service (Integration)", () => {
         title: "Product 1",
         description: null,
         category: "Product Category 1",
-        price: 58.95,
         quantity: 2,
         is_active: true,
       }),

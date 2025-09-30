@@ -13,7 +13,12 @@ export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
       hasViewerPermission: false,
     });
 
-    return reply.status(200).send({ product });
+    return reply.status(200).send({
+      product: {
+        ...product,
+        price: product.price.toNumber(),
+      },
+    });
   } catch (err) {
     throw err;
   }

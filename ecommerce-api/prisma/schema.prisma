@@ -9,13 +9,14 @@ datasource db {
 }
 
 model User {
-    id            String    @id @default(uuid())
+    id            String   @id @default(uuid())
     name          String
-    email         String    @unique
+    email         String   @unique
     password_hash String
-    created_at    DateTime  @default(now())
-    session       Session[]
-    Cart          Cart[]
+    created_at    DateTime @default(now())
+
+    session Session[]
+    cart    Cart[]
 
     @@map("users")
 }
@@ -34,14 +35,15 @@ model Session {
 }
 
 model Product {
-    id          String     @id @default(uuid())
+    id          String  @id @default(uuid())
     title       String
     description String?
     category    String
     price       Decimal
-    quantity    Int        @default(0)
-    is_active   Boolean    @default(true)
-    CartItem    CartItem[]
+    quantity    Int     @default(0)
+    is_active   Boolean @default(true)
+
+    cart_items CartItem[]
 
     @@map("products")
 }
@@ -58,9 +60,10 @@ model Cart {
     finished_at DateTime?
     created_at  DateTime   @default(now())
 
-    user_id  String
-    user     User       @relation(fields: [user_id], references: [id])
-    CartItem CartItem[]
+    user_id String
+    user    User   @relation(fields: [user_id], references: [id])
+
+    cart_items CartItem[]
 
     @@map("carts")
 }
