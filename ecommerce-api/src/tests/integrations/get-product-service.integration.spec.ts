@@ -50,7 +50,7 @@ describe("Get Product Service (Integration)", () => {
         title: "Product 1",
         description: null,
         category: "Product Category 1",
-        price: product.price,
+        price: product.price.toNumber(),
         quantity: 2,
         is_active: true,
       }),

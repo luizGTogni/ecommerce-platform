@@ -10,7 +10,6 @@ import { ICartsRepository } from "@/models/repositories/interfaces/carts-reposit
 import { IProductsRepository } from "@/models/repositories/interfaces/products-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
 import { AddCartItemService } from "@/services/carts/add-cart-item.service.js";
-import { Decimal } from "@prisma/client/runtime/library";
 import { hash } from "bcryptjs";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -68,7 +67,7 @@ describe("Add Cart Item Service (Unit)", () => {
         cart_id: cart.id,
         product_id: product.id,
         quantity: 2,
-        unit_price: new Decimal(product.price),
+        unit_price: product.price.toNumber(),
       }),
     );
   });
@@ -294,7 +293,7 @@ describe("Add Cart Item Service (Unit)", () => {
         cart_id: cart.id,
         product_id: product.id,
         quantity: 4,
-        unit_price: new Decimal(product.price),
+        unit_price: product.price.toNumber(),
       }),
     );
 
@@ -311,7 +310,7 @@ describe("Add Cart Item Service (Unit)", () => {
         cart_id: cart.id,
         product_id: product.id,
         quantity: 5,
-        unit_price: new Decimal(product.price),
+        unit_price: product.price.toNumber(),
       }),
     );
   });

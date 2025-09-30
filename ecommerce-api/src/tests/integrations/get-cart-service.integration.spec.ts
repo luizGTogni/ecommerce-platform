@@ -76,13 +76,13 @@ describe("Get Cart Service (Integration)", () => {
         cart_items: expect.arrayContaining([
           expect.objectContaining({
             id: cartItem.id,
-            unit_price: cartItem.unit_price,
+            unit_price: cartItem.unit_price.toNumber(),
             quantity: cartItem.quantity,
             product: expect.objectContaining({
               id: product.id,
               title: product.title,
               category: product.category,
-              price: product.price,
+              price: product.price.toNumber(),
               quantity: product.quantity,
             }),
           }),
