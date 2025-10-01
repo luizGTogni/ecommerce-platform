@@ -69,7 +69,13 @@ export class UpdateCartItemService {
     cartItem.quantity = quantity;
     cartItem.unit_price = product.price;
 
-    await this.cartItemsRepository.save(cartItemId, cartItem);
+    await this.cartItemsRepository.save(cartItemId, {
+      id: cartItem.id,
+      cart_id: cartItem.cart_id,
+      product_id: cartItem.product_id,
+      quantity: cartItem.quantity,
+      unit_price: cartItem.unit_price,
+    });
 
     return {
       cartItem: {
