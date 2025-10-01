@@ -1,4 +1,3 @@
-import { ResourceAlreadyExistsError } from "@/errors/resource-already-exists.error.js";
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
 import { CartStatus } from "@/models/entities/cart.entity.js";
 import type { CartRead } from "@/models/entities/dto/cart-read.dto.js";
@@ -36,7 +35,23 @@ export class CreateCartService {
     });
 
     if (cartAlreadyExists) {
-      throw new ResourceAlreadyExistsError();
+      const cartItemsFormatted = cartAlreadyExists.cart_items?.map((item) => {
+        return {
+          ...item,
+          unit_price: item.unit_price.toNumber(),
+          product: {
+            ...item.product,
+            price: item.product.price.toNumber(),
+          },
+        };
+      });
+
+      return {
+        cart: {
+          ...cartAlreadyExists,
+          cart_items: cartItemsFormatted,
+        },
+      };
     }
 
     const cart = await this.cartsRepository.create({
