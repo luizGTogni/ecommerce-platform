@@ -28,10 +28,11 @@ describe("Update Product to Cart (e2e)", () => {
     });
 
     await request(app.server)
-      .post(`/cart/${product.id}`)
+      .post(`/carts/items`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 2,
+        productId: product.id,
       });
 
     const cartItem = await prisma.cartItem.findFirst();
@@ -40,7 +41,7 @@ describe("Update Product to Cart (e2e)", () => {
     expect(cartItem?.unit_price.toNumber()).toEqual(58.95);
 
     const response = await request(app.server)
-      .patch(`/cart/${cartItem?.id}`)
+      .patch(`/carts/items/${cartItem?.id}`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 4,

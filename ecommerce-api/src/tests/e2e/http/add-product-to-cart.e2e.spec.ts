@@ -28,10 +28,11 @@ describe("Add Product to Cart (e2e)", () => {
     });
 
     const response = await request(app.server)
-      .post(`/cart/${product.id}`)
+      .post(`/carts/items`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 2,
+        productId: product.id,
       });
 
     const cart = await prisma.cart.findFirst();
