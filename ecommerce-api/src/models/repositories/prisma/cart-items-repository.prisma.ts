@@ -1,10 +1,10 @@
 import { prisma } from "@/configs/prisma.js";
+import { CartItemCreate } from "@/models/entities/dto/cart-item-create.dto.js";
+import { CartItemEdited } from "@/models/entities/dto/cart-item-edited.dto.js";
 import {
   FindByCartIdAndProductIdProps,
   ICartItemsRepository,
 } from "../interfaces/cart-items-repository.interface.js";
-import { CartItemCreate } from "@/models/entities/dto/cart-item-create.dto.js";
-import { CartItemEdited } from "@/models/entities/dto/cart-item-edited.dto.js";
 
 export class PrismaCartItemsRepository implements ICartItemsRepository {
   async create(data: CartItemCreate) {
@@ -22,6 +22,14 @@ export class PrismaCartItemsRepository implements ICartItemsRepository {
     });
   }
 
+  async findById(id: string) {
+    return await prisma.cartItem.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async findByCartIdAndProductId({
     cartId,
     productId,
@@ -30,6 +38,14 @@ export class PrismaCartItemsRepository implements ICartItemsRepository {
       where: {
         cart_id: cartId,
         product_id: productId,
+      },
+    });
+  }
+
+  async delete(id: string) {
+    await prisma.cartItem.delete({
+      where: {
+        id,
       },
     });
   }

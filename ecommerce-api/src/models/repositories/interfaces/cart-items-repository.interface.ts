@@ -10,7 +10,9 @@ export type FindByCartIdAndProductIdProps = {
 export interface ICartItemsRepository {
   create(data: CartItemCreate): Promise<CartItem>;
   save(cartItemId: string, cartItem: CartItemEdited): Promise<void>;
+  findById(id: string): Promise<CartItem | null>;
   findByCartIdAndProductId(
     props: FindByCartIdAndProductIdProps,
   ): Promise<CartItem | null>;
+  delete(id: string): Promise<void>;
 }
