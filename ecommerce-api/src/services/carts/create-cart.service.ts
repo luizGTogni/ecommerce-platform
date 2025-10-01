@@ -1,6 +1,7 @@
 import { ResourceAlreadyExistsError } from "@/errors/resource-already-exists.error.js";
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
-import { Cart, CartStatus } from "@/models/entities/cart.entity.js";
+import { CartStatus } from "@/models/entities/cart.entity.js";
+import type { CartRead } from "@/models/entities/dto/cart-read.dto.js";
 import { ICartsRepository } from "@/models/repositories/interfaces/carts-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
 
@@ -10,7 +11,7 @@ type CreateCartRequest = {
 };
 
 type CreateCartResponse = {
-  cart: Cart;
+  cart: CartRead;
 };
 
 export class CreateCartService {
@@ -43,6 +44,22 @@ export class CreateCartService {
       status: status ? status : "OPEN",
     });
 
-    return { cart };
+    const cartItemsFormatted = cart.cart_items?.map((item) => {
+      return {
+        ...item,
+        unit_price: item.unit_price.toNumber(),
+        product: {
+          ...item.product,
+          price: item.product.price.toNumber(),
+        },
+      };
+    });
+
+    return {
+      cart: {
+        ...cart,
+        cart_items: cartItemsFormatted,
+      },
+    };
   }
 }

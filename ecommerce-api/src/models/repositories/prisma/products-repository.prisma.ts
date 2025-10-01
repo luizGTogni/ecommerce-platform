@@ -1,8 +1,8 @@
 import { prisma } from "@/configs/prisma.js";
-import { ProductCreate } from "@/models/entities/dto/product-create.dto.js";
-import { IProductsRepository } from "../interfaces/products-repository.interface.js";
 import { Prisma } from "@/generated/prisma/index.js";
+import { ProductCreate } from "@/models/entities/dto/product-create.dto.js";
 import { Product } from "@/models/entities/product.entity.js";
+import { IProductsRepository } from "../interfaces/products-repository.interface.js";
 
 export class PrismaProductsRepository implements IProductsRepository {
   private NUMBERS_BY_PAGE = 20;

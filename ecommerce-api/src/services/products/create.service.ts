@@ -1,4 +1,4 @@
-import { Product } from "@/models/entities/product.entity.js";
+import type { ProductRead } from "@/models/entities/dto/product-read.dto.js";
 import { IProductsRepository } from "@/models/repositories/interfaces/products-repository.interface.js";
 
 type CreateProductRequest = {
@@ -11,7 +11,7 @@ type CreateProductRequest = {
 };
 
 type CreateProductResponse = {
-  product: Product;
+  product: ProductRead;
 };
 
 export class CreateProductService {
@@ -20,6 +20,11 @@ export class CreateProductService {
   async execute(data: CreateProductRequest): Promise<CreateProductResponse> {
     const product = await this.productsRepository.create(data);
 
-    return { product };
+    return {
+      product: {
+        ...product,
+        price: product.price.toNumber(),
+      },
+    };
   }
 }

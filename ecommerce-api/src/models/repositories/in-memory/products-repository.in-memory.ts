@@ -1,7 +1,8 @@
-import { randomUUID } from "node:crypto";
-import { IProductsRepository } from "../interfaces/products-repository.interface.js";
 import { ProductCreate } from "@/models/entities/dto/product-create.dto.js";
 import { Product } from "@/models/entities/product.entity.js";
+import { Decimal } from "@prisma/client/runtime/library";
+import { randomUUID } from "node:crypto";
+import { IProductsRepository } from "../interfaces/products-repository.interface.js";
 
 export class InMemoryProductsRepository implements IProductsRepository {
   private products: Product[] = [];
@@ -12,6 +13,7 @@ export class InMemoryProductsRepository implements IProductsRepository {
     const productCreated: Product = {
       id: randomUUID(),
       ...data,
+      price: new Decimal(data.price),
     };
 
     this.products.push(productCreated);

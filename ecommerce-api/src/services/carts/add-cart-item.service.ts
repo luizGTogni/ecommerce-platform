@@ -1,7 +1,7 @@
 import { CartAlreadyFinishedError } from "@/errors/cart-already-finished.error.js";
 import { ProductOutOfStockError } from "@/errors/product-out-of-stock.error.js";
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
-import { CartItem } from "@/models/entities/cart-item.entity.js";
+import type { CartItemRead } from "@/models/entities/dto/cart-item-read.dto.js";
 import { ICartItemsRepository } from "@/models/repositories/interfaces/cart-items-repository.interface.js";
 import { ICartsRepository } from "@/models/repositories/interfaces/carts-repository.interface.js";
 import { IProductsRepository } from "@/models/repositories/interfaces/products-repository.interface.js";
@@ -16,7 +16,7 @@ type AddCartItemRequest = {
 };
 
 type AddCartItemResponse = {
-  cartItem: CartItem;
+  cartItem: CartItemRead;
 };
 
 export class AddCartItemService {
@@ -74,7 +74,12 @@ export class AddCartItemService {
 
       await this.cartItemsRepository.save(cartItem.id, cartItem);
 
-      return { cartItem };
+      return {
+        cartItem: {
+          ...cartItem,
+          unit_price: cartItem.unit_price.toNumber(),
+        },
+      };
     }
 
     cartItem = await this.cartItemsRepository.create({
@@ -84,6 +89,11 @@ export class AddCartItemService {
       unit_price: new Decimal(product.price),
     });
 
-    return { cartItem };
+    return {
+      cartItem: {
+        ...cartItem,
+        unit_price: cartItem.unit_price.toNumber(),
+      },
+    };
   }
 }

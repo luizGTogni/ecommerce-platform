@@ -19,14 +19,7 @@ export async function searchProducts(
       page,
     });
 
-    const productsMapped = products.map((product) => {
-      return {
-        ...product,
-        price: product.price.toNumber(),
-      };
-    });
-
-    return reply.status(200).send({ products: productsMapped });
+    return reply.status(200).send({ products });
   } catch (err) {
     throw err;
   }
