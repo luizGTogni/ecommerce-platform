@@ -1,5 +1,4 @@
 import { prisma } from "@/configs/prisma.js";
-import { ResourceAlreadyExistsError } from "@/errors/resource-already-exists.error.js";
 import { ResourceNotFoundError } from "@/errors/resource-not-found.error.js";
 import { ICartsRepository } from "@/models/repositories/interfaces/carts-repository.interface.js";
 import { IUsersRepository } from "@/models/repositories/interfaces/users-repository.interface.js";
@@ -66,10 +65,18 @@ describe("Create Cart Service (Integration)", () => {
       userId: user.id,
     });
 
-    await expect(() =>
-      sut.execute({
-        userId: user.id,
+    const response = await sut.execute({
+      userId: user.id,
+    });
+
+    expect(response.cart).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        user_id: user.id,
+        status: "OPEN",
+        finished_at: null,
+        created_at: expect.any(Date),
       }),
-    ).rejects.toBeInstanceOf(ResourceAlreadyExistsError);
+    );
   });
 });

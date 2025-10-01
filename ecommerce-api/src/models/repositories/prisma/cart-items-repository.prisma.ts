@@ -27,6 +27,9 @@ export class PrismaCartItemsRepository implements ICartItemsRepository {
       where: {
         id,
       },
+      include: {
+        product: true,
+      },
     });
   }
 
