@@ -20,4 +20,18 @@ export class InMemoryPaymentsRepository implements IPaymentsRepository {
 
     return paymentCreated;
   }
+
+  async findByStripeIntentId(intent_id: string) {
+    return (
+      this.payments.find((payment) => payment.transaction_id === intent_id) ||
+      null
+    );
+  }
+
+  async save(paymentId: string, paymentEdited: Payment) {
+    const paymentIndex = this.payments.findIndex(
+      (payment) => payment.id === paymentId,
+    );
+    this.payments[paymentIndex] = paymentEdited;
+  }
 }
