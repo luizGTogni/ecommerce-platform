@@ -9,6 +9,8 @@ const envSchema = z.object({
   REDIS_PASSWORD: z.string(),
   REDIS_PORT: z.coerce.number(),
   JWT_SECRET: z.string(),
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_PUBLIC_KEY: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
