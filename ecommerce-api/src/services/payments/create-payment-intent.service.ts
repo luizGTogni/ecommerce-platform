@@ -9,7 +9,6 @@ import { stripe } from "@/configs/stripe.js";
 type CreatePaymentIntentRequest = {
   userId: string;
   cartId: string;
-  amount: Decimal;
   paymentMethod: PaymentMethod;
 };
 
@@ -34,7 +33,6 @@ export class CreatePaymentIntentService {
   async execute({
     userId,
     cartId,
-    amount,
     paymentMethod,
   }: CreatePaymentIntentRequest): Promise<CreatePaymentIntentResponse> {
     const user = await this.usersRepository.findById(userId);
@@ -49,17 +47,26 @@ export class CreatePaymentIntentService {
       throw new ResourceNotFoundError();
     }
 
+    const total_price = cart.cart_items
+      ? cart.cart_items.reduce(
+          (acc, item) => acc + item.unit_price.toNumber() * item.quantity,
+          0,
+        )
+      : 0;
+
+    console.log(PaymentMethodStripe[paymentMethod]);
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount.toNumber(),
+      amount: total_price * 100,
       currency: "brl",
-      payment_method_types: [PaymentMethodStripe[paymentMethod]],
+      payment_method: PaymentMethodStripe[paymentMethod],
     });
 
     await this.paymentsRepository.create({
       user_id: userId,
       cart_id: cartId,
       transaction_id: paymentIntent.id,
-      amount,
+      amount: new Decimal(total_price),
       payment_method: paymentMethod,
       status: "PENDING",
     });
