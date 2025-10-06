@@ -44,6 +44,9 @@ importers:
       ioredis:
         specifier: 5.8.0
         version: 5.8.0
+      stripe:
+        specifier: 19.0.0
+        version: 19.0.0(@types/node@24.5.2)
       zod:
         specifier: 4.1.11
         version: 4.1.11
@@ -1790,6 +1793,15 @@ packages:
 
   strip-literal@3.0.0:
     resolution: {integrity: sha512-TcccoMhJOM3OebGhSBEmp3UZ2SfDMZUEBdRA/9ynfLi8yYajyWX3JiXArcJt4Umh4vISpspkQIY8ZZoCqjbviA==}
+
+  stripe@19.0.0:
+    resolution: {integrity: sha512-4HG17r7mui4Awic75DVSFVmH4EIXqNvoo3T2cYrVhcwovQz3gzQIPUiqzLzGcgxdUd9CB8zCntKzm0o63tUBgw==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@types/node': '>=16'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   superagent@10.2.3:
     resolution: {integrity: sha512-y/hkYGeXAj7wUMjxRbB21g/l6aAEituGXM9Rwl4o20+SX3e8YOSV6BxFXl+dL3Uk0mjSL3kCbNkwURm8/gEDig==}
@@ -3699,6 +3711,12 @@ snapshots:
   strip-literal@3.0.0:
     dependencies:
       js-tokens: 9.0.1
+
+  stripe@19.0.0(@types/node@24.5.2):
+    dependencies:
+      qs: 6.14.0
+    optionalDependencies:
+      '@types/node': 24.5.2
 
   superagent@10.2.3:
     dependencies:
