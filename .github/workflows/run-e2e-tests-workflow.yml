@@ -7,7 +7,7 @@ on:
 
 jobs:
   run-e2e-tests:
-    name: Run Integration Tests
+    name: Run E2E Tests
     runs-on: ubuntu-latest
 
     defaults:
@@ -60,3 +60,5 @@ jobs:
           REDIS_MODE: "dev"
           REDIS_PORT: 6379
           REDIS_PASSWORD: ""
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}

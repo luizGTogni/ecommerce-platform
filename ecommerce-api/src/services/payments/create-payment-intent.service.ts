@@ -59,7 +59,7 @@ export class CreatePaymentIntentService {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total_price * 100,
       currency: "brl",
-      payment_method: PaymentMethodStripe[paymentMethod],
+      payment_method_types: [PaymentMethodStripe[paymentMethod]],
     });
 
     await this.paymentsRepository.create({
