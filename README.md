@@ -8,7 +8,7 @@ O projeto foi construído com foco em boas práticas de arquitetura e testabilid
 
 ## Índice
 
-- [**MyGoals**](#mygoals)
+- [**E-commerce**](#ecommerce)
   - [Índice](#índice)
   - [Introdução](#introdução)
   - [Tecnologias Utilizadas](#tecnologias-utilizadas)
@@ -120,3 +120,4 @@ Certifique-se de que você tenha instalado:
 - Developers: Luiz Togni
 - LinkedIn:
 - [Luiz Togni](https://www.linkedin.com/in/luizgustavotogni/)
+
